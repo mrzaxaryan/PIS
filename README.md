@@ -1,1 +1,1 @@
-# [NoRWX](https://github.com/mrzaxaryan/PIS)
+# [PIS](https://github.com/mrzaxaryan/PIS)
