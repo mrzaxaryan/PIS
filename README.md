@@ -29,4 +29,4 @@ x86_64 (64-bit):
 On x86_64, data and literals are commonly accessed with RIP-relative addressing. That means the instruction encodings hold a displacement relative to the instruction pointer (RIP). If the compiler emits RIP-relative loads for constants and your code is position-independent (compiled/linked as PIC), those displacement operands will point to offsets inside the blob — so moving .rdata into .text generally can work. In other words, the code continues to find data via PC-relative offsets inside the single contiguous blob.
 
 x86 (32-bit):
-On 32-bit x86 there is no RIP register and most compilers emit absolute or absolute-indirect data references (or use the global offset table in PIC builds). Typical non-PIC 32-bit code will use absolute addresses or depend on base registers set up by the loader. Simply merging .rdata into .text will usually break those absolute references — they’ll point to addresses the shellcode blob does not occupy. You would need to either:
+
