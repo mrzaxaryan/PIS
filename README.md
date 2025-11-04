@@ -3,7 +3,15 @@
 Many authors call out the same problem: handling strings in Windows shellcode is difficult. Shellcode is normally the raw bytes extracted from a PE file’s .text section — position-independent machine code that runs without the C runtime and typically resolves APIs indirectly rather than using import linkage. Those constraints make embedding, locating, and using strings at runtime a recurring and subtle challenge. In a normal PE, string literals are placed in the read-only data section (.rdata), while writable initialized data appears in .data.
 
 A common workaround is stack strings: build or copy the message into stack memory at runtime (byte-wise or with immediate writes), then pass that buffer to APIs. Stack strings hinder static analysis and can be used for obfuscation, but they also complicate development and debugging. If you need runtime logging during development, you must still construct messages dynamically (stack or heap), which increases code size and complexity and can hit practical limits depending on the assembler, calling convention, or available stack space.
+```
+char load_lib_name[] = { 'L','o','a','d','L','i','b','r','a','r','y','A',0 };
+```
+```
+#pragma code_seg(".text")
 
+__declspec(allocate(".text"))
+char load_lib_str[] = "LoadLibraryA";
+```
 Another option is a custom loader that maps the PE image and performs manual relocations instead of using the Windows loader. A custom loader gives you full control over where data lives (so you can place strings in writable memory you control) and can simplify runtime addressing. The downsides are obvious: more code, more edge cases to handle (imports, relocations, TLS), and an identifiable fingerprint that may hinder stealth.
 
 So what can we do? Let’s be explicit: the PE contains several sections, but when we extract only .text we get the raw machine instructions. One trick is to force .data / .rdata contents into the .text output by the linker. For example:
