@@ -55,7 +55,7 @@ while (!(currentAddress[0] == 0x55 && currentAddress[1] == 0x89 && currentAddres
 SetBaseAddress(currentAddress);
 
 char* strInvalid = "Hello World!";  // raw in the blob — in x86 this is an offset, not a valid pointer
-char* fixedStr = Relocate(str); // compute runtime pointer: blob_base + offset
+char* fixedStr = Relocate(strInvalid); // compute runtime pointer: blob_base + offset
 char* strValid = Relocate("Hello World!");
 
 ```
