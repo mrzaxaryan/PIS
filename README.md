@@ -44,7 +44,7 @@ First, the shellcode must discover its mapped base address (the runtime address 
 #define SetBaseAddress(v) (*(PVOID*)((BYTE*)__readfsdword(0x30) + 0x10) = (v))
 #define Relocate(s) (GetBaseAddress() + s)
 
-//...
+BOOL WINAPI mainCRTStartup() { 
 
 char* currentAddress = (char*)_ReturnAddress();
 // 55              push ebp
@@ -58,4 +58,7 @@ char* strInvalid = "Hello World!";  // raw in the blob — in x86 this is an off
 char* fixedStr = Relocate(strInvalid); // compute runtime pointer: blob_base + offset
 char* strValid = Relocate("Hello World!");
 
+// ...
+
+}
 ```
